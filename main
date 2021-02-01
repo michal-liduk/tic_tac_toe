@@ -1,0 +1,93 @@
+def win_check(board, start, count):
+    reverse_board = [board[-i -1] for i, row in enumerate(board)]
+    diag = [board[i][i] for i in range(len(board))]
+    reverse_diag = [reverse_board[i][i] for i in range(len(reverse_board))]
+    x_diag = diag.count("X")
+    o_diag = diag.count("O")
+    x_r_diag = reverse_diag.count("X")
+    o_r_diag = reverse_diag.count("O")
+
+    x_wins = False
+    o_wins = False
+    impossible_x = start.count("X")
+    impossible_o = start.count("O")
+   
+    if board[0][0] == "X" and board[1][0] == "X" and board[2][0] == "X":
+        x_wins = True
+    if board[0][0] == "O" and board[1][0] == "O" and board[2][0] == "O":
+        o_wins = True
+    if board[0][1] == "X" and board[1][1] == "X" and board[2][1] == "X":
+        x_wins = True
+    if board[0][1] == "O" and board[1][1] == "O" and board[2][1] == "O":
+        o_wins = True
+    if board[0][2] == "X" and board[1][2] == "X" and board[2][2] == "X":
+        x_wins = True
+    if board[0][2] == "O" and board[1][2] == "O" and board[2][2] == "O":
+        o_wins = True
+
+    for i in board:
+        if i.count("X") == 3:
+            x_wins = True
+        elif i.count("O") == 3:
+            o_wins = True
+    if x_diag == 3 or x_r_diag == 3:
+        x_wins = True
+    if o_diag == 3 or o_r_diag == 3:
+        o_wins = True
+    difference = abs(impossible_x - impossible_o)
+    if x_wins == True and o_wins == True:
+        return "Impossible"
+    elif difference >= 2:
+        return "Impossible"
+    elif x_wins == True:
+        return "X wins"
+    elif o_wins == True:
+        return "O wins"
+    elif count < 9:
+        return "Game not finished"
+    elif count == 9:
+        return "Draw"
+
+start = "_________"
+
+board = [[start[0], start[1], start[2]], 
+        [start[3], start[4], start[5]],
+        [start[6], start[7], start[8]]]
+
+print("---------")
+print("| " + board[0][0] + " " + board[0][1] + " " + board[0][2] + " |")
+print("| " + board[1][0] + " " + board[1][1] + " " + board[1][2] + " |")
+print("| " + board[2][0] + " " + board[2][1] + " " + board[2][2] + " |")
+print("---------")
+count = 0
+while True:
+    first_move = input("Enter the coordinates: ").split()
+    if first_move[0].isdigit() == False:
+        print("You should enter numbers!")
+        continue
+    x = int(first_move[0])
+    y = int(first_move[1])
+    if (x < 1 or x > 3) or (y < 1 or y > 3):
+        print("Coordinates should be from 1 to 3!")
+        continue
+    i = x - 1
+    j = y - 1
+    if board[i][j] == "X" or board[i][j] == "O":
+        print("This cell is occupied! Choose another one!")
+        continue
+    else:
+        if count % 2 == 0:
+            board[i][j] = "X"
+        elif count % 2 == 1:
+            board[i][j] = "O"
+        print("---------")
+        print("| " + board[0][0] + " " + board[0][1] + " " + board[0][2] + " |")
+        print("| " + board[1][0] + " " + board[1][1] + " " + board[1][2] + " |")
+        print("| " + board[2][0] + " " + board[2][1] + " " + board[2][2] + " |")
+        print("---------")
+        count += 1
+    if win_check(board, start, count) == "Game not finished":
+        continue
+    else:
+        print(win_check(board, start, count))
+        break
